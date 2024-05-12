@@ -1,0 +1,117 @@
+goals:
+  - name: "player_ask_for_game_suggestion"
+    activation:
+      intent: "ask_for_game_suggestion_detected"
+    actions:
+      - say_verbatim: "Let me give you some suggestions..."
+      - send_trigger: "ask_for_game_init"
+  - name: "player_game_pick_nlhe"
+    repeatable: true
+    activation:
+      intent: "game_pick_nlhe_detected"
+    actions:
+      - send_trigger: "game_pick_nlhe"
+  - name: "player_game_pick_99"
+    repeatable: true
+    activation:
+      intent: "game_pick_99_detected"
+    actions:
+      - send_trigger: "game_pick_99"
+  - name: "player_add_bot"
+    repeatable: true
+    activation:
+      intent: "add_bot_detected"
+    actions:
+      - send_trigger: "add_bot"
+  - name: "player_ready"
+    repeatable: true
+    activation:
+      intent: "ready_detected"
+    actions:
+      - send_trigger: "ready"
+  - name: "player_raise"
+    repeatable: true
+    activation:
+      intent: "raise_detected"
+    actions:
+      - send_trigger: "raise"
+  - name: "player_fold"
+    repeatable: true
+    activation:
+      intent: "fold_detected"
+    actions:
+      - send_trigger: "fold"
+  - name: "player_call"
+    repeatable: true
+    activation:
+      intent: "call_detected"
+    actions:
+      - send_trigger: "call"
+  - name: "player_ask_for_table_info"
+    repeatable: true
+    activation:
+      intent: "ask_for_table_info_detected"
+    actions:
+      - send_trigger: "ask_for_table_info"
+  # goals triggered by code, with dynamic parameters based on current situation
+  - name: "suggest_game"
+    repeatable: true
+    activation:
+      trigger: "inform_game_suggestion"
+    actions:
+      - instruction: "tell {player} to pick a mode from {{p.available_modes}}"
+  - name: "share_game"
+    repeatable: true
+    activation:
+      trigger: "inform_game_mode"
+    actions:
+      - instruction: "tell {player} that the current mode has been set to {{p.game_mode}}"
+  - name: "invalid_command"
+    repeatable: true
+    activation:
+      trigger: "inform_invalid"
+    actions:
+      - instruction: "apologize to {player} and tell {player} that their previous command is not available at the moment"
+  - name: "share_table_info"
+    repeatable: true
+    activation:
+      trigger: "inform_table_info_not_turn"
+    actions:
+      - instruction: "tell {player} they are in the middle of a {{p.current_mode}} card game, then explain that the game is in {{p.current_state}}, and is not yet player's turn."
+  - name: "share_table_info_and_prompt_move"
+    repeatable: true
+    activation:
+      trigger: "inform_table_info_is_turn"
+    actions:
+      - instruction: "tell {player} they are in the middle of a {{p.current_mode}} card game, then explain that the game is in {{p.current_state}}"
+      - instruction: "looking at the revealed public cards {{p.public_cards}} and {player}'s current hand {{p.current_hand}}, give player some suggestions on whether to raise, call, or fold."
+intents:
+  - name: "ask_for_game_suggestion_detected"
+    training_phrases:
+      - "I want to play a game"
+      - "What can I do now?"
+      - "What is available?"
+      - "Any suggested games?"
+      - "How to join?"
+      - "What to do?"
+      - "Game suggestion"
+  - name: "game_pick_nlhe_detected"
+    training_phrases:
+      - "NLHE"
+      - "No Limit Texas Hold'em"
+      - "Texas"
+      - "Hold'em"
+  - name: "game_pick_99_detected"
+    training_phrases:
+      - "Ninety-nine"
+      - "99"
+  - name: "add_bot_detected"
+    training_phrases:
+      - "fill in the rest with bot players"
+      - "I want to play against bot"
+      - "Can I play the game on my own?"
+      - "Start game with current players"
+      - "Add bots"
+  - name: "ready_detected"
+    training_phrases:
+      - "Ready"
